@@ -14,8 +14,6 @@
     "clean": "run-p clean:*",
     "clean:dist": "rimraf dist",
     "clean:dist_firefox": "rimraf dist_firefox",
-    "ci:test": "run-s ci:test:*",
-    "ci:test:lint": "run-s lint",
     "test": "jest",
     "test:types": "tsc --noEmit"
   },
@@ -25,6 +23,7 @@
     "@emotion/styled": "11.10.0",
     "@mui/material": "5.10.2",
     "@reduxjs/toolkit": "1.8.4",
+    "jest-dom": "4.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "7.2.8",
