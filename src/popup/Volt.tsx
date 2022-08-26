@@ -2,7 +2,6 @@ import React, {ReactElement, useEffect, useLayoutEffect, useState} from 'react';
 import {Box, Button, Card, Grid, Stack, TextField, Typography} from "@mui/material";
 import logo from '../logo.png'
 // import Web3 from "web3";
-// import Web3 from 'web3/dist/web3.min.js';
 
 interface FormDataI {
   account: string;
