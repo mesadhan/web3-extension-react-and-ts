@@ -49,8 +49,8 @@ const Volt: React.FC = () => {
   const onCallBackground = async () => {
     console.log('msg', 'onClickBackground');
 
-    // const res = await browser.runtime.sendMessage({ msg: "startFunc" });
-    // console.log('msg', res);
+    const res = await browser.runtime.sendMessage({ action: "onTestCall" });
+    console.log('result', res);
   }
 
 

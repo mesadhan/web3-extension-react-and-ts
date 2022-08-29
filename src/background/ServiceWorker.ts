@@ -22,10 +22,14 @@
 // chrome.extension.sendMessage()
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-   if (msg.action === 'somethingComplex') {
-       console.log('msg', 'api response done');
-   }
-  sendResponse({status:'ok', data:'Hello, from Service Worker'})
+
+  console.log('client-info', msg);
+
+  if (msg.action === 'onTestCall') {
+    console.log('msg', 'api response done');
+    sendResponse({status: 'ok', data: 'Hello, from Service Worker'})
+  }
+
 });
 
 export {}
