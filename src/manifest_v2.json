@@ -1,16 +1,16 @@
 {
   "manifest_version": 2,
-  "name": "Sample WebExtension",
-  "version": "0.0.0",
+  "name": "Web3 Extension React & TS",
+  "description": "Browser Extension, TypeScript, React",
+  "version": "1.0.0",
   "icons": {
     "16": "assets/icons/extension_16.png",
     "32": "assets/icons/extension_32.png",
     "48": "assets/icons/extension_48.png",
     "128": "assets/icons/extension_128.png"
   },
-  "description": "Sample description",
-  "homepage_url": "https://github.com/abhijithvijayan/web-extension-starter",
-  "short_name": "Sample Name",
+  "homepage_url": "https://github.com/mesadhan/web3-extension-react-and-ts",
+  "short_name": "Custom Extension",
   "permissions": [
     "activeTab",
     "storage",
@@ -18,9 +18,9 @@
     "https://*/*"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "__chrome|firefox__author": "abhijithvijayan",
+  "__chrome|firefox__author": "mesadhan",
   "__opera__developer": {
-    "name": "abhijithvijayan"
+    "name": "mesadhan"
   },
   "__firefox__applications": {
     "gecko": {
@@ -49,7 +49,7 @@
   },
   "background": {
     "scripts": [
-      "js/background.bundle.js"
+      "js/background.js"
     ],
     "__chrome|opera__persistent": false
   },
@@ -60,7 +60,7 @@
         "https://*/*"
       ],
       "js": [
-        "js/contentScript.bundle.js"
+        "js/contentScript.js"
       ]
     }
   ]

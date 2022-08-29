@@ -4,13 +4,13 @@
   "description": "Browser Extension, TypeScript, React",
   "version": "0.1",
   "background": {
-    "service_worker": "js/background.bundle.js",
+    "service_worker": "js/background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "js": [
-        "js/contentScript.bundle.js"
+        "js/contentScript.js"
       ],
       "matches": [
         "http://*/*",

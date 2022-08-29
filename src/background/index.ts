@@ -29,13 +29,7 @@ browser.runtime.onInstalled.addListener(async (details) => {
 });
 
 
-browser.runtime.onMessage.addListener((message:any, sender: any) => {
-  console.log('msg', message);
-  sender({status: 'ok', data: 'hello from background js'});
-});
-
-
-browser.runtime.onMessage.addListener((message:any, sender: any) => {
-  console.log('msg', message);
-  sender({status: 'ok', data: 'hello from background js'});
-});
+// browser.runtime.onMessage.addListener( (request:any, sender:any, sendResponse:any) =>  {
+//   console.log('msg', request);
+//   sendResponse({status: 'ok', data: 'hello from background js'});
+// });

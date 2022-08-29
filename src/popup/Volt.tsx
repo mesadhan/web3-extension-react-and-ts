@@ -46,6 +46,14 @@ const Volt: React.FC = () => {
   const [accountInfo, setAccountInfo] = useState<FormDataI>({account: ''})
 
 
+  const onCallBackground = async () => {
+    console.log('msg', 'onCallBackground');
+
+    const res = await browser.runtime.sendMessage({ msg: "startFunc" });
+    console.log('msg', res);
+  }
+
+
   useLayoutEffect(() => {
     console.log('msg', 'useLayoutEffect');
   })
@@ -130,9 +138,8 @@ const Volt: React.FC = () => {
             {/*        variant="contained">*/}
             {/*  Grab Volt Information</Button>*/}
 
-            <button type="button" onClick={() => {return openWebPage('options.html');}}>
-              Options Page
-            </button>
+            <button type="button" onClick={() => {return openWebPage('options.html');}}>Options Page</button>
+            <button type="button" onClick={onCallBackground}>Call Background</button>
           </Grid>
 
 
