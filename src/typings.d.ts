@@ -2,4 +2,14 @@
 /// <reference types="react" />
 /// <reference types="react-dom" />
 /// <reference types="chrome"/>
-/// <reference types="vite/client" />
+/* tslint:disable:no-unused-variable */
+
+
+declare module '*.jpg';
+declare module '*.png';
+declare module '*.svg';
+declare module '*.jpeg';
+
+// interface Window {
+//   ethereum: any
+// }

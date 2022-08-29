@@ -1,8 +1,37 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "module": "esnext",
-    "moduleResolution": "node"
-  },
-  "include": ["vite.config.ts", "src/manifest.ts", "utils"]
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"jsx": "react",
+		"declaration": true,
+		"noEmitOnError": true,
+		"newLine": "lf",
+		"removeComments": true,
+		"lib": [
+			"ES2020.Promise"
+		],
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictPropertyInitialization": false,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"forceConsistentCasingInFileNames": true,
+		"stripInternal": false
+	},
+	"exclude": [
+		"node_modules"
+	]
 }

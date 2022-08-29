@@ -1,12 +1,13 @@
-import React from "react";
+import * as React from 'react';
 import { createRoot } from "react-dom/client";
-
 import Options from "./Options";
 
-import "../common.css";
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <Options />
-  </React.StrictMode>
+
+createRoot(document.getElementById("options-root") as HTMLElement).render(
+    <React.StrictMode>
+      <Options />
+    </React.StrictMode>
 );
+
+

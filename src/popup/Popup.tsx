@@ -1,7 +1,9 @@
-import React, {ReactElement} from 'react';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import React from "react";
+import './styles.css';
 import Volt from "./Volt";
+
 
 const darkTheme = createTheme({
   palette: {
@@ -18,10 +20,9 @@ const darkTheme = createTheme({
   }
 });
 
-const Popup = (): ReactElement => {
-  document.body.style.width = '357px';
-  document.body.style.height = '600px';
-  document.body.style.margin = '0';
+
+const Popup: React.FC = () => {
+
 
   return (
       // <Container className="">
@@ -33,13 +34,54 @@ const Popup = (): ReactElement => {
       </ThemeProvider>
       // </Container>
   );
+
+
+  /*return (
+      <section id="popup">
+        <h2>WEB-EXTENSION-STARTER</h2>
+
+        <button onClick={showMetaMaskInfo}> MetaMask</button>
+
+
+        <button
+            id="options__button"
+            type="button"
+            onClick={(): Promise<Tabs.Tab> => {
+              return openWebPage('options.html');
+            }}
+        >
+          Options Page
+        </button>
+        <div className="links__holder">
+          <ul>
+            <li>
+              <button
+                  type="button"
+                  onClick={(): Promise<Tabs.Tab> => {
+                    return openWebPage(
+                        'https://github.com/abhijithvijayan/web-extension-starter'
+                    );
+                  }}
+              >
+                GitHub
+              </button>
+            </li>
+            <li>
+              <button
+                  type="button"
+                  onClick={(): Promise<Tabs.Tab> => {
+                    return openWebPage(
+                        'https://www.buymeacoffee.com/abhijithvijayan'
+                    );
+                  }}
+              >
+                Buy Me A Coffee
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+  );*/
 };
 
 export default Popup;
-
-
-/*
-# MUI CSS REF/:
-- https://mui.com/system/spacing/
-- https://mui.com/system/properties/
- */

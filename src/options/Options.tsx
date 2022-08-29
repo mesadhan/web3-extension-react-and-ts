@@ -1,9 +1,11 @@
-import React, { ReactElement } from 'react';
+import * as React from 'react';
 
-const Options = (): ReactElement => {
+import './styles.css';
+
+const Options: React.FC = () => {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <h1>Options</h1>
+    <div>
+      <h1>Hello from Option Page</h1>
     </div>
   );
 };

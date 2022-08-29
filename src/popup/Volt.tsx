@@ -1,17 +1,46 @@
-import React, {ReactElement, useEffect, useLayoutEffect, useState} from 'react';
-import {Box, Button, Card, Grid, Stack, TextField, Typography} from "@mui/material";
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {Box, Button, Card, Grid, TextField, Typography} from "@mui/material";
 import logo from '../logo.png'
-// import Web3 from "web3";
+import createMetaMaskProvider from "metamask-extension-provider";
+import {browser, Tabs} from 'webextension-polyfill-ts';
+
+const openWebPage = (url: string): Promise<Tabs.Tab> => {
+  return browser.tabs.create({url});
+}
 
 interface FormDataI {
   account: string;
 }
 
+const getProvider = () => {
+  // if (window.ethereum) {
+  //   console.log('found window.ethereum>>');
+  //   return window.ethereum;
+  // } else {
+  return createMetaMaskProvider();
+  // }
+}
 
-const Volt = (): ReactElement => {
+
+const getAccounts = async (provider: any) => {
+  if (provider) {
+    const [accounts, chainId] = await Promise.all([
+      provider.request({
+        method: 'eth_requestAccounts',
+      }),
+      provider.request({method: 'eth_chainId'}),
+    ]);
+    return [accounts, chainId];
+  }
+  return false;
+}
+
+
+const Volt: React.FC = () => {
   document.body.style.width = '357px';
   document.body.style.height = '600px';
   document.body.style.margin = '0';
+
 
   const [formData, setFormData] = useState<FormDataI>({account: ''})
   const [accountInfo, setAccountInfo] = useState<FormDataI>({account: ''})
@@ -31,19 +60,12 @@ const Volt = (): ReactElement => {
 
   }, [])
 
-  const loadBCData = async () => {
+  const loadBCData = async (event: any) => {
+    const provider = getProvider();
+    let accounts: any = await getAccounts(provider)
 
-    console.log('msg', formData);
-    setAccountInfo({
-      account: formData.account
-    })
-
-
-    // const web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
-    // const network = await web3.eth.net.getNetworkType();
-    // console.log('network', network);
-    // const accounts = await web3.eth.getAccounts()
-    // setAccountInfo({ account: accounts[0] })
+    setFormData({ account: accounts[0] })
+    setAccountInfo({account: accounts[0]})
   }
 
 
@@ -90,8 +112,10 @@ const Volt = (): ReactElement => {
 
 
           <Grid item md={12}>
-            <TextField name={'account'} onChange={onInputChange} fullWidth={true} size='small'
-                       label="WALLET ACCOUNT NO"></TextField>
+            {/*<TextField name={'account'} onChange={onInputChange}
+                       defaultValue={formData?.account}
+                       fullWidth={true} size='small'
+                       label="WALLET ACCOUNT NO"></TextField>*/}
           </Grid>
 
           <Grid item md={12}>
@@ -102,7 +126,18 @@ const Volt = (): ReactElement => {
 
 
           <Grid item md={12}>
-            <p style={{textAlign: 'center'}}>{accountInfo?.account}</p>
+            {/*<Button onClick={loadBCData} fullWidth={true} size='medium' color='info'*/}
+            {/*        variant="contained">*/}
+            {/*  Grab Volt Information</Button>*/}
+
+            <button type="button" onClick={() => {return openWebPage('options.html');}}>
+              Options Page
+            </button>
+          </Grid>
+
+
+          <Grid item md={12}>
+            <p style={{textAlign: 'center', fontSize: '12px'}}>{accountInfo?.account}</p>
           </Grid>
 
 

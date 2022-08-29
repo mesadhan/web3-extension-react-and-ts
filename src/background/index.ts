@@ -1,33 +1,26 @@
-import browser from 'webextension-polyfill';
-import store from '../app/store';
-import { isDev } from '../shared/utils';
+import {browser} from 'webextension-polyfill-ts';
+// import 'emoji-log';
 
 
+browser.runtime.onUpdateAvailable.addListener( async () => {
+  browser.runtime.reload()
+})
 
-
-// import Web3 from "web3";
-// let loadWeb3Test = async () => {
-//   const web3 = new Web3(Web3.givenProvider || "http://localhost:8545")
-//   const network = await web3.eth.net.getNetworkType();
-//   console.log('network', network);
-// }
-
-
-
-store.subscribe(() => {
-  console.log('state', store.getState());
+browser.alarms.onAlarm.addListener((alarm) => {
+  console.log(alarm.name); // refresh
+  // helloWorld();
+  console.log("Hello, world!");
 });
+
 
 // show welcome page on new install
 browser.runtime.onInstalled.addListener(async (details) => {
+  //   console.emoji('🦄', 'extension installed');
+
   if (details.reason === 'install') {
     console.log('onInstalled', 'show the welcome page');
 
-
-
-
-
-
+    browser.alarms.create('refresh', {periodInMinutes: 3});
 
     //show the welcome page
     // const url = browser.runtime.getURL(isDev ? 'src/welcome/welcome.html' : 'welcome.html'); // TODO: better approach
@@ -36,12 +29,13 @@ browser.runtime.onInstalled.addListener(async (details) => {
 });
 
 
-
-chrome.runtime.onUpdateAvailable.addListener( async () => {
-  //await loadWeb3Test();
-  chrome.runtime.reload()
-})
-
+browser.runtime.onMessage.addListener((message:any, sender: any) => {
+  console.log('msg', message);
+  sender({status: 'ok', data: 'hello from background js'});
+});
 
 
-export {};
+browser.runtime.onMessage.addListener((message:any, sender: any) => {
+  console.log('msg', message);
+  sender({status: 'ok', data: 'hello from background js'});
+});
