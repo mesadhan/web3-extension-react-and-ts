@@ -10,6 +10,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const fs = require("fs");
 
 const viewsPath = path.join(__dirname, 'views');
 const sourcePath = path.join(__dirname, 'src');
@@ -17,9 +18,15 @@ const destPath = path.join(__dirname, 'extension');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
 
+const ifDirExists = (SrcPath, value) => {
+  return fs.existsSync(path.join(__dirname, 'src', SrcPath))
+      ? value
+      : undefined;
+};
+
 const extensionReloaderPlugin =
   nodeEnv === 'development'
-    ? new ExtensionReloader({
+      ? new ExtensionReloader({
         port: 9090,
         reloadPage: true,
         entries: {
@@ -27,6 +34,7 @@ const extensionReloaderPlugin =
           contentScript: 'contentScript',
           background: 'background',
           extensionPage: ['popup', 'options', 'welcome'],
+          serviceworker: "./src/service-worker.ts",
         },
       })
     : () => {
@@ -60,6 +68,7 @@ module.exports = {
   entry: {
     manifest: path.join(sourcePath, 'manifest.json'),
     background: path.join(sourcePath, 'background', 'index.ts'),
+    bgServiceWorker: path.join(sourcePath, 'background', 'ServiceWorker.ts'),
     contentScript: path.join(sourcePath, 'content', 'index.ts'),
     popup: path.join(sourcePath, 'popup', 'index.tsx'),
     options: path.join(sourcePath, 'options', 'index.tsx'),

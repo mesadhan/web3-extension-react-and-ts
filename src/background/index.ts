@@ -1,3 +1,4 @@
+/*
 import {browser} from 'webextension-polyfill-ts';
 // import 'emoji-log';
 
@@ -27,9 +28,7 @@ browser.runtime.onInstalled.addListener(async (details) => {
     // await browser.tabs.create({ url });
   }
 });
+*/
 
 
-// browser.runtime.onMessage.addListener( (request:any, sender:any, sendResponse:any) =>  {
-//   console.log('msg', request);
-//   sendResponse({status: 'ok', data: 'hello from background js'});
-// });
+export {}

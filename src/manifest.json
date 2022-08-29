@@ -3,10 +3,14 @@
   "name": "Web3 Extension React & TS",
   "description": "Browser Extension, TypeScript, React",
   "version": "0.1",
+
   "background": {
-    "service_worker": "js/background.js",
-    "type": "module"
+    "__firefox__scripts": [
+      "js/background.js"
+    ],
+    "__chrome|opera|edge__service_worker": "js/bgServiceWorker.js"
   },
+
   "content_scripts": [
     {
       "js": [
