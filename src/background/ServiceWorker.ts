@@ -4,7 +4,7 @@
 // function makeOrange(color: string): void {
 //   document.body.style.backgroundColor = color;
 // }
-//
+
 // chrome.action.onClicked.addListener((tab) => {
 //   active = !active;
 //   const color = active ? 'orange' : 'white';
@@ -15,7 +15,6 @@
 //   }).then();
 // });
 
-//
 // chrome.extension.connect()
 // chrome.extension.onConnect
 // chrome.extension.onMessage
@@ -27,7 +26,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
   if (msg.action === 'onTestCall') {
     console.log('msg', 'api response done');
-    sendResponse({status: 'ok', data: 'Hello, from Service Worker'})
+    sendResponse({status: 'ok', data: 'Hello, from Background Service Worker'})
   }
 
 });
