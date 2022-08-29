@@ -1,40 +1,24 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Box, Button, Card, Grid, TextField, Typography} from "@mui/material";
+import {alertClasses, Box, Button, Card, Grid, TextField, Typography} from "@mui/material";
 import logo from '../logo.png'
-import createMetaMaskProvider from "metamask-extension-provider";
-import {browser, Tabs} from 'webextension-polyfill-ts';
+import storage from "../utils/storage";
 
-const openWebPage = (url: string): Promise<Tabs.Tab> => {
-  return browser.tabs.create({url});
-}
+import {
+  connectWallet, disconnectWallet,
+  getProvider,
+  onSendMessage,
+  openWebPage, unsubscribeToEvents
+} from "../utils";
+
 
 interface FormDataI {
   account: string;
 }
 
-const getProvider = () => {
-  // if (window.ethereum) {
-  //   console.log('found window.ethereum>>');
-  //   return window.ethereum;
-  // } else {
-  return createMetaMaskProvider();
-  // }
+interface onSendMessageI {
+  status: string;
+  data: string;
 }
-
-
-const getAccounts = async (provider: any) => {
-  if (provider) {
-    const [accounts, chainId] = await Promise.all([
-      provider.request({
-        method: 'eth_requestAccounts',
-      }),
-      provider.request({method: 'eth_chainId'}),
-    ]);
-    return [accounts, chainId];
-  }
-  return false;
-}
-
 
 const Volt: React.FC = () => {
   document.body.style.width = '357px';
@@ -42,40 +26,56 @@ const Volt: React.FC = () => {
   document.body.style.margin = '0';
 
 
+  const [isAuthenticated, setAuthenticated]:any = useState(false);
+  const [voltInfo, setVoltInfo]:any = useState(false);
+  // const [appLoading, setAppLoading]:any = useState(false);
+
+
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const info = await connectEagerly();
+      console.log('msg', 'connectEagerly...')
+      console.log('volt-information', info);
+      setVoltInfo(info);
+      // setVoltInfo(JSON.stringify(info) );
+    }
+
+   fetchData().catch(console.error);
+
+    return () => {
+      const provider = getProvider();
+      unsubscribeToEvents(provider);
+    }
+  }, [isAuthenticated]);
+
+
+  const connectEagerly = async () => {
+    const metamask = await storage.get('metamask-connected');
+
+    if (metamask?.connected) {
+      setAuthenticated(true)
+      await connectWallet();
+    }
+
+    return await storage.get('metamask-data');
+  }
+
+
   const [formData, setFormData] = useState<FormDataI>({account: ''})
-  const [accountInfo, setAccountInfo] = useState<FormDataI>({account: ''})
 
 
   const onCallBackground = async () => {
-    console.log('msg', 'onClickBackground');
-
-    const res = await browser.runtime.sendMessage({ action: "onTestCall" });
+    const res:onSendMessageI = await onSendMessage('onTestCall');
     console.log('result', res);
+    alert(res?.data)
   }
 
 
   useLayoutEffect(() => {
     console.log('msg', 'useLayoutEffect');
   })
-
-  useEffect(() => {
-
-    /*const fetchData = async () => {
-      await loadBCData();
-    }
-
-    fetchData().catch(console.error);*/
-
-  }, [])
-
-  const loadBCData = async (event: any) => {
-    const provider = getProvider();
-    let accounts: any = await getAccounts(provider)
-
-    setFormData({ account: accounts[0] })
-    setAccountInfo({account: accounts[0]})
-  }
-
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -84,16 +84,11 @@ const Volt: React.FC = () => {
     })
   }
 
-
   return (
       <Card sx={{p: 2}}>
         <Grid
             spacing={2}
             container
-            // direction="column"
-            // justifyContent="center"
-            // alignItems="stretch|center"
-            // sx={{ m: "2rem" }}
             direction="column"
             justifyContent="center"
             style={{minHeight: '100vh'}}>
@@ -127,24 +122,29 @@ const Volt: React.FC = () => {
           </Grid>
 
           <Grid item md={12}>
-            <Button onClick={loadBCData} fullWidth={true} size='medium' color='info'
+
+            <Button
+                variant="contained" fullWidth={true} size='medium'
+                color={isAuthenticated ? "error" : "success"}
+                onClick={isAuthenticated ? disconnectWallet : connectWallet}>
+              {isAuthenticated ? "Disconnect Wallet" : "Connect Wallet"}
+            </Button>
+
+            {/*<Button onClick={loadBCData} fullWidth={true} size='medium' color='info'
                     variant="contained">
-              Grab Volt Information</Button>
+              Grab Volt Information</Button>*/}
           </Grid>
 
 
-          <Grid item md={12}>
-            {/*<Button onClick={loadBCData} fullWidth={true} size='medium' color='info'*/}
-            {/*        variant="contained">*/}
-            {/*  Grab Volt Information</Button>*/}
-
+          <Grid item md={12} justifyContent={'space-between'} display={'flex'}>
             <button type="button" onClick={() => {return openWebPage('options.html');}}>Options Page</button>
             <button type="button" onClick={onCallBackground}>Call Background</button>
           </Grid>
 
 
           <Grid item md={12}>
-            <p style={{textAlign: 'center', fontSize: '12px'}}>{accountInfo?.account}</p>
+            Account: <pre style={{textAlign: 'center', fontSize: '12px'}}> {voltInfo?.account} </pre>
+            <pre style={{textAlign: 'center', fontSize: '12px'}}>Signature: {voltInfo?.chainId} </pre>
           </Grid>
 
 
