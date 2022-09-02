@@ -139,13 +139,13 @@ module.exports = {
     new webpack.EnvironmentPlugin(['NODE_ENV', 'TARGET_BROWSER']),
     // delete previous build files
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        path.join(process.cwd(), `extension/${targetBrowser}`),
-        path.join(
-          process.cwd(),
-          `extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
-        ),
-      ],
+      // cleanOnceBeforeBuildPatterns: [
+      //   path.join(process.cwd(), `extension/${targetBrowser}`),
+      //   path.join(
+      //     process.cwd(),
+      //     `extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
+      //   ),
+      // ],
       cleanStaleWebpackAssets: false,
       verbose: true,
     }),
