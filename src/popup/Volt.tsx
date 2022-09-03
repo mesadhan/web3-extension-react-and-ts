@@ -57,12 +57,10 @@ const Volt: React.FC = () => {
       alert('Please unlock your metamask wallet')
     }
 
-    // https://web3js.readthedocs.io/en/v1.2.11/web3-eth-personal.html#id17
     const web3: any = new Web3(provider);
-    let message = "Some string"
-    let hash = web3.utils.sha3(message)
+    let message = "message"
     let account = await provider.selectedAddress;
-    let signature = await web3.eth.personal.sign(hash, account, "hash")
+    let signature = await web3.eth.personal.sign(message, account, "")
     console.log('signature', signature);
 
     const requestOptions = {
@@ -73,7 +71,6 @@ const Volt: React.FC = () => {
 
     const request = await fetch(`${HOST_BASE_URL}/api/v1/verification/signature`, requestOptions)
     const res = await request.json()
-    //alert(`API Response: ${JSON.stringify(res)}`)
     setVerifyResult(JSON.stringify(res))
   }
 
