@@ -8,6 +8,7 @@ import {EthereumEvents} from "../utils/events";
 import Web3 from "web3";
 import {MetaMaskInpageProvider} from "@metamask/inpage-provider";
 
+const HOST_BASE_URL = 'http://localhost:7001'
 
 interface FormDataI {
   account: string;
@@ -23,7 +24,7 @@ interface walletInfo {
   chainId: string;
 }
 
-const metaMaskProvider:MetaMaskInpageProvider = createMetaMaskProvider();
+const metaMaskProvider: MetaMaskInpageProvider = createMetaMaskProvider();
 
 
 const Volt: React.FC = () => {
@@ -35,7 +36,7 @@ const Volt: React.FC = () => {
 
   /* --------------------- Web3 implementation started ---------------------*/
   // const [isAuthenticated, setAuthenticated]: any = useState(false);
-  const [provider, setProvider]:any = useState(null);
+  const [provider, setProvider]: any = useState(null);
 
   const getAccounts = async (provider: any) => {
     if (provider) {
@@ -51,20 +52,37 @@ const Volt: React.FC = () => {
   }
 
   const onGenSignature = async () => {
+
+    if(!await provider?.selectedAddress){
+      alert('Please unlock your metamask wallet')
+    }
+
     // https://web3js.readthedocs.io/en/v1.2.11/web3-eth-personal.html#id17
-    const web3:any = new Web3(provider);
+    const web3: any = new Web3(provider);
     let message = "Some string"
     let hash = web3.utils.sha3(message)
-    let accounts = await provider.selectedAddress;
-    let signature = await web3.eth.personal.sign(hash, accounts, "hash")
+    let account = await provider.selectedAddress;
+    let signature = await web3.eth.personal.sign(hash, account, "hash")
     console.log('signature', signature);
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({account, signature})
+    };
+
+    const request = await fetch(`${HOST_BASE_URL}/api/v1/verification/signature`, requestOptions)
+    const res = await request.json()
+    //alert(`API Response: ${JSON.stringify(res)}`)
+    setVerifyResult(JSON.stringify(res))
   }
 
   useEffect(() => {
 
-    // ethereum._metamask.isUnlocked():
 
-    if(!metaMaskProvider?.isMetaMask) {
+    console.log('isUnlocked_metamask', provider?._metamask.isUnlocked() )
+
+    if (!metaMaskProvider?.isMetaMask) {
       alert("Please Install metamask extension")
     }
     metaMaskProvider.on(EthereumEvents.CONNECT, (chainId) => {
@@ -87,10 +105,11 @@ const Volt: React.FC = () => {
   /* --------------------- Web3 implementation done ---------------------*/
 
   const [formData, setFormData] = useState<FormDataI>({account: ''})
+  const [verifyResult, setVerifyResult] = useState('')
 
 
   const onCallBackground = async () => {
-    const res:onSendMessageI = await onSendMessage('onTestCall');
+    const res: onSendMessageI = await onSendMessage('onTestCall');
     console.log('result', res);
     alert(res?.data)
   }
@@ -130,7 +149,8 @@ const Volt: React.FC = () => {
                 mb: 2,
                 mt: 2,
               }}>
-                To decentralized web3
+                {/*To decentralized web3*/}
+                Status: {metaMaskProvider?.isMetaMask ? "MetaMask is Installed" : 'Please Install MetaMask Extension'}
               </Box>
             </Typography>
 
@@ -146,8 +166,9 @@ const Volt: React.FC = () => {
 
           <Grid item md={12}>
 
-            <Alert severity={metaMaskProvider?.isMetaMask ? "success" : 'error'}>
-              Status: {metaMaskProvider?.isMetaMask ? "success" : 'error'}
+
+            <Alert severity={metaMaskProvider?.selectedAddress ? "success" : 'error'}>
+              {metaMaskProvider?.selectedAddress ? "Metamask Wallet Account Selected" : 'Please Select Metamask Wallet Account'}
             </Alert>
 
             <br/>
@@ -176,8 +197,7 @@ const Volt: React.FC = () => {
 
           <Grid item md={12}>
             Account <pre style={{textAlign: 'center', fontSize: '12px'}}> {provider?.selectedAddress} </pre>
-            Signature <pre
-              style={{textAlign: 'center', fontSize: '12px'}}> {provider?.chainId} </pre>
+            Verify Result <pre style={{textAlign: 'center', fontSize: '12px'}}> {verifyResult} </pre>
           </Grid>
 
 
